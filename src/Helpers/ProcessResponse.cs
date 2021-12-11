@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ThePeer
+namespace ThePeerHQ
 {
 	public static class ProcessResponse
 	{
@@ -32,9 +32,9 @@ namespace ThePeer
 					throw new NotAcceptableException(error.Message);
 				case 422:
 					multiError = JsonConvert.DeserializeObject<MultiErrorResponse>(response.Content);
-					foreach (var newError in multiError.errors)
+					foreach (var newError in multiError.Errors)
 					{
-						throw new InvalidPayloadException(newError.error[0]);
+						throw new InvalidPayloadException(newError.ToString());
 					}
 					return null;
 				case 503:

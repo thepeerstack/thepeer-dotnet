@@ -1,18 +1,17 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ThePeer
+namespace ThePeerHQ
 {
 	public class MultiErrorResponse
 	{
-		public string message { get; set; }
-		public List<Errors> errors { get; set; }
+		[JsonProperty("message")]
+		public string Message { get; set; }
 
-		public class Errors
-		{
-			public List<string> error { get; set; }
-		}
+		[JsonProperty("errors")]
+		public dynamic Errors { get; set; }
 	}
 
 

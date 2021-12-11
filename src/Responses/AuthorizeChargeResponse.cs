@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ThePeer
+namespace ThePeerHQ
 {
 	public class AuthorizeChargeResponse
 	{

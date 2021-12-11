@@ -6,9 +6,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ThePeer
+namespace ThePeerHQ
 {
-	public  class ThePeer : IThePeerInterface
+	public class ThePeer : IThePeerHQInterface
 	{
 		private readonly string secretKey;
 		private readonly RestClient client = new RestClient();
@@ -38,14 +38,14 @@ namespace ThePeer
 			}
 		}
 
-		public async Task<AuthorizeChargeResponse> AuthorizeDirectCharge(string reference, bool inSufficientFunds)
+		public async Task<AuthorizeChargeResponse> AuthorizeDirectCharge(string reference, string @event)
 		{
 			try
 			{
 				var httpRequest = new RestRequest("/debit/" + reference, Method.POST);
 				var requestObject = new
 				{
-					insufficient_funds = inSufficientFunds
+					@event = @event
 				};
 				var requestBody = JsonConvert.SerializeObject(requestObject);
 				httpRequest.AddJsonBody(requestBody);
@@ -84,13 +84,13 @@ namespace ThePeer
 
 			try
 			{
-				var httpRequest = new RestRequest("/user/" + reference, Method.DELETE);
+				var httpRequest = new RestRequest("/users/" + reference, Method.DELETE);
 				IRestResponse response = await client.ExecuteAsync(httpRequest);
 				return JsonConvert.DeserializeObject<DefaultResponse>(ProcessResponse.Process(response));
 			}
-			catch (Exception ex)
+			catch (Exception exception)
 			{
-				throw new ServerErrorException(ex.Message);
+				throw exception;
 			}
 		}
 
@@ -102,20 +102,20 @@ namespace ThePeer
 				IRestResponse response = await client.ExecuteAsync(httpRequest);
 				return JsonConvert.DeserializeObject<LinkIdResponse>(ProcessResponse.Process(response));
 			}
-			catch (Exception ex)
+			catch (Exception exception)
 			{
-				throw new ServerErrorException(ex.Message);
+				throw exception;
 			}
 		}
 
-		
 
-		
+
+
 
 		public async Task<IndexUserResponse> IndexUser(string name, string identifier, string email)
 		{
 			try {
-				var httpRequest = new RestRequest("/user", Method.POST);
+				var httpRequest = new RestRequest("/users", Method.POST);
 				var requestObject = new
 				{
 					name = name,
@@ -127,9 +127,9 @@ namespace ThePeer
 				IRestResponse response = await client.ExecuteAsync(httpRequest);
 				return JsonConvert.DeserializeObject<IndexUserResponse>(ProcessResponse.Process(response));
 			}
-			catch (Exception ex)
+			catch (Exception exception)
 			{
-				throw new ServerErrorException(ex.Message);
+				throw exception;
 			}
 		}
 
@@ -141,9 +141,9 @@ namespace ThePeer
 				IRestResponse response = await client.ExecuteAsync(httpRequest);
 				return JsonConvert.DeserializeObject<IndexUserResponse>(ProcessResponse.Process(response));
 			}
-			catch (Exception ex)
+			catch (Exception exception)
 			{
-				throw new ServerErrorException(ex.Message);
+				throw exception;
 			}
 		}
 
@@ -151,7 +151,7 @@ namespace ThePeer
 		{
 			try
 			{
-				var httpRequest = new RestRequest("/user/" + reference, Method.PUT);
+				var httpRequest = new RestRequest("/users/" + reference, Method.PUT);
 				var requestObject = new
 				{
 					identifier = identifier,
@@ -161,29 +161,29 @@ namespace ThePeer
 				IRestResponse response = await client.ExecuteAsync(httpRequest);
 				return JsonConvert.DeserializeObject<UpdateUserResponse>(ProcessResponse.Process(response));
 			}
-			catch (Exception ex)
+			catch (Exception exception)
 			{
-				throw new ServerErrorException(ex.Message);
+				throw exception;
 			}
 		}
 
-		public async Task<ProcessReceiptResponse> ProcessSendReceipt(string receipt, bool inSufficientFunds)
+		public async Task<ProcessReceiptResponse> ProcessSendReceipt(string receipt, string @event)
 		{
 			try
 			{
 				var httpRequest = new RestRequest("/send/" + receipt, Method.POST);
 				var requestObject = new
 				{
-					insufficient_funds = inSufficientFunds
+					@event = @event
 				};
 				var requestBody = JsonConvert.SerializeObject(requestObject);
 				httpRequest.AddJsonBody(requestBody);
 				IRestResponse response = await client.ExecuteAsync(httpRequest);
 				return JsonConvert.DeserializeObject<ProcessReceiptResponse>(ProcessResponse.Process(response));
 			}
-			catch (Exception ex)
+			catch (Exception exception)
 			{
-				throw new ServerErrorException(ex.Message);
+				throw exception;
 			}
 		}
 
@@ -195,9 +195,9 @@ namespace ThePeer
 				IRestResponse response = await client.ExecuteAsync(httpRequest);
 				return JsonConvert.DeserializeObject<GetReceiptResponse>(ProcessResponse.Process(response));
 			}
-			catch (Exception ex)
+			catch (Exception exception)
 			{
-				throw new ServerErrorException(ex.Message);
+				throw exception;
 			}
 		}
 
